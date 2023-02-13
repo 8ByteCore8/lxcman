@@ -5,7 +5,7 @@ import { hideBin } from "yargs/helpers";
 import commands from "../commands";
 
 
-export default async function main() {
+async function main() {
     const parser = yargs(hideBin(process.argv));
 
     for (let command of commands) {
@@ -30,3 +30,5 @@ export default async function main() {
 
     parser.parse();
 }
+
+main();

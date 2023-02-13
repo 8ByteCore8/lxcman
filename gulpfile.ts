@@ -3,7 +3,8 @@ import { rm } from "fs/promises";
 import ts from "gulp-typescript";
 import merge = require("merge2");
 import map from "gulp-sourcemaps";
-import uglify from "gulp-uglify"
+import uglify from "gulp-uglify";
+import { exec } from "child_process";
 
 
 gulp.task("build:clean", () => {
@@ -23,7 +24,7 @@ gulp.task("build:code", (() => {
         res.dts
             .pipe(gulp.dest("./dist/types")),
         res.js
-        .pipe(uglify({compress:true}))
+            .pipe(uglify({ compress: true }))
             .pipe(map.write())
             .pipe(gulp.dest("./dist"))
     );
@@ -40,9 +41,30 @@ gulp.task("build:copy", gulp.parallel([
     }
 ]));
 
+gulp.task("build:pack", gulp.series(
+    () => {
+        return new Promise<void>((res, rej) => {
+            exec("cd ./dist/; yarn pack", (err) => {
+                if (!err)
+                    res();
+                else
+                    throw err;
+
+            });
+        });
+    },
+    () => {
+        return gulp.src("./dist/*.tgz")
+            .pipe(gulp.dest("./"));
+    },
+    "build:clean",
+));
+
 gulp.task("build",
     gulp.series([
         "build:clean",
         "build:code",
         "build:copy",
+        "build:pack",
     ]));
+

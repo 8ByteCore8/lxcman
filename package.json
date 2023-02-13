@@ -1,14 +1,18 @@
 {
   "name": "lxcman",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "lxcman makes LXC containers easier.",
   "main": "index.js",
   "author": "Bogdan Kushnir <kushnirb9@gmail.com>",
   "license": "MIT",
   "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "dev": "ts-node src/bin/lxcman.ts",
-    "build": "gulp build"
+    "build": "gulp build",
+    "pack": "gulp pack"
   },
   "dependencies": {
     "yargs": "^17.6.2"
